@@ -1,7 +1,9 @@
 <template>
     <jet-authentication-card>
         <template #logo>
-            <jet-authentication-card-logo />
+            <inertia-link :href="route('welcome')">
+                <img :src="'storage/images/logoo.png'" alt="Logo" class="w-64">
+            </inertia-link>
         </template>
 
         <jet-validation-errors class="mb-4" />

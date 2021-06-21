@@ -1,7 +1,10 @@
 <template>
     <jet-authentication-card>
         <template #logo>
-            <jet-authentication-card-logo />
+            <inertia-link :href="route('welcome')">
+                <img :src="'storage/images/logoo.png'" alt="Logo" class="w-64">
+            </inertia-link>
+            <!-- <jet-authentication-card-logo /> -->
         </template>
 
         <jet-validation-errors class="mb-4" />
@@ -11,6 +14,12 @@
                 <jet-label for="name" value="Name" />
                 <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus autocomplete="name" />
             </div>
+
+            <div>
+                <jet-label for="username" value="Username" />
+                <jet-input id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autofocus autocomplete="username" />
+            </div>
+
 
             <div class="mt-4">
                 <jet-label for="email" value="Email" />
@@ -26,6 +35,16 @@
                 <jet-label for="password_confirmation" value="Confirm Password" />
                 <jet-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
             </div>
+
+            <div class="mt-4">
+                <jet-label for="gender" value="Gender" />
+                <select v-model="form.gender" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm ">
+                    <option disabled value="">Please select one</option>
+                    <option v-bind:value="'Female'">Female</option>
+                    <option v-bind:value="'Male'">Male</option>
+                </select>
+            </div>
+
 
             <div class="mt-4" v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature">
                 <jet-label for="terms">
@@ -76,6 +95,8 @@
             return {
                 form: this.$inertia.form({
                     name: '',
+                    username: '',
+                    gender:'',
                     email: '',
                     password: '',
                     password_confirmation: '',
