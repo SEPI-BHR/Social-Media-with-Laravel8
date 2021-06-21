@@ -59,6 +59,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    protected $with = ['profile'];
+ 
 
     /**
      * Get the default profile photo URL if no profile photo has been uploaded.
