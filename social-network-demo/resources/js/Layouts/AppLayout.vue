@@ -123,23 +123,23 @@
                 </div>
             </div>
         </nav>
+         
         <div class="flex flex-wrap pt-16 sm:flex-nowrap">
             <!-- Page sidebar -->
-
+           <side-bar></side-bar>
+            <main>
+                <slot></slot>
+            </main>
         </div>
-        
-        <main>
-            <slot></slot>
-        </main>
     </div>   
 </template>
-
 <script>
     
     import JetDropdown from '@/Jetstream/Dropdown'
     import JetDropdownLink from '@/Jetstream/DropdownLink'
     import JetNavLink from '@/Jetstream/NavLink'
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
+    import SideBar from '@/Components/SideBar'
 
     export default {
         components: {
@@ -147,6 +147,7 @@
             JetDropdownLink,
             JetNavLink,
             JetResponsiveNavLink,
+            SideBar,
         },
 
         data() {
