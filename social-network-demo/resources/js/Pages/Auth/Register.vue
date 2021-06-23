@@ -2,7 +2,7 @@
     <jet-authentication-card>
         <template #logo>
             <inertia-link :href="route('welcome')">
-                <img :src="'storage/images/logoo.png'" alt="Logo" class="w-64">
+                <img :src="'storage/images/logo.png'" alt="Logo" class="w-64">
             </inertia-link>
             <!-- <jet-authentication-card-logo /> -->
         </template>
