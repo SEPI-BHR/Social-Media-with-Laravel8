@@ -30,6 +30,54 @@ trait Friendable {
         }
         return 0;
     }
+    public function accept_friend($requester) {
+        if($this->has_pending_friend_request_from($requester) === 0) {
+            return 0;
+        }
+        $friendship = Friend::where('requester', $requester)
+            ->where('user_requested', $this->id)
+            ->first();
+        if($friendship) {
+            $friendship->update([
+                'status' => 1
+            ]);
+            return 1;
+        }
+        return 0;
+    }
+    public function deny_friend($requester) {
+        if($this->has_pending_friend_request_from($requester) === 0) {
+            return 0;
+        }
+        $friendship = Friend::where('requester', $requester)
+            ->where('user_requested', $this->id)
+            ->first();
+        if($friendship) {
+            $friendship->delete();
+            return 1;
+        }
+        return 0;
+    }
+
+    public function delete_friend($user_requested_id) {
+		if($this->id === $user_requested_id) {
+            return 0;
+        }
+		if($this->is_friends_with($user_requested_id) === 1) {
+            $Friendship1 = Friend::where('requester', $user_requested_id)
+            ->where('user_requested', $this->id)
+            ->first();
+            if ($Friendship1) {
+                $Friendship1->delete();
+            }
+            $Friendship2 = Friend::where('user_requested', $user_requested_id)
+            ->where('requester', $this->id)
+            ->first();
+            if ($Friendship2) {
+                $Friendship2->delete();
+            }
+        }
+    }
     public function friends() {
         $friends = array();
         $f1 = Friend::where('status', 1)
