@@ -12,32 +12,32 @@
         <template v-else-if="isFriendsWith">
             <form @submit.prevent="deleteFriend">
                 <jet-danger-button type="submit">
-                    <!-- <fingerprint-spinner
+                    <fingerprint-spinner
                         :animation-duration="1500"
                         :size="20"
                         class="text-white"
                         v-if="loading"
-                    /> -->
-                    <!-- <template v-else> -->
+                    />
+                    <template v-else>
                         Unfriend
                         <icon name="user-minus" class="w-4 h-4 fill-current ml-1"></icon>
-                    <!-- </template> -->
+                    </template>
                 </jet-danger-button>
             </form>
         </template>
         <template v-else-if="$page.props.user.id != profile.id">
             <form @submit.prevent="addFriend">
                 <blue-button type="submit" class="text-xs">
-                    <!-- <fingerprint-spinner
+                    <fingerprint-spinner
                         :animation-duration="1500"
                         :size="20"
                         class="text-white"
                         v-if="loading"
-                    /> -->
-                    <!-- <template v-else> -->
+                    />
+                    <template v-else>
                         Add Friend
                         <icon name="user-plus" class="w-4 h-4 fill-current ml-1"></icon>
-                    <!-- </template> -->
+                    </template>
                 </blue-button>
             </form>
         </template>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    // import { FingerprintSpinner } from 'epic-spinners'
+    import { FingerprintSpinner } from 'epic-spinners'
     import Accept from './Accept'
     import BlueButton from '@/Components/Buttons/BlueButton'
     import Ignore from './Ignore'
@@ -56,7 +56,7 @@
             Accept,
             BlueButton,
             Ignore,
-            // FingerprintSpinner,
+            FingerprintSpinner,
             JetDangerButton,
         },
         data() {
@@ -67,33 +67,33 @@
                 deleteFriendForm: this.$inertia.form({
                     user: this.profile
                 }),
-                // loading: false,
+                loading: false,
             }
         },
         methods: {
             addFriend() {
-                // this.loading = true
+                this.loading = true
                 this.addFriendForm.post(this.route('friends.store', this.profile.id), {
                     preserveScroll: true,
                     onSuccess: ()=>{
-                        // Toast.fire({
-                        //     icon: 'success',
-                        //     title: 'Friend request sent!'
-                        // })
-                        // this.loading = false
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Friend request sent!'
+                        })
+                        this.loading = false
                     },
                 })
             },
             deleteFriend() {
-                // this.loading = true
+                this.loading = true
                 this.deleteFriendForm.delete(this.route('friends.destroy', this.profile.id), {
                     preserveScroll: true,
                     onSuccess: ()=>{
-                        // Toast.fire({
-                        //     icon: 'success',
-                        //     title: 'Friend has been removed!'
-                        // })
-                        // this.loading = false
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Friend has been removed!'
+                        })
+                        this.loading = false
                     },
                 })
             },
