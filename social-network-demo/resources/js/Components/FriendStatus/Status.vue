@@ -73,7 +73,7 @@
         methods: {
             addFriend() {
                 this.loading = true
-                this.addFriendForm.post(this.route('friends.store', this.profile.id), {
+                this.addFriendForm.post(this.route('fri-ends.store', this.profile.id), {
                     preserveScroll: true,
                     onSuccess: ()=>{
                         Toast.fire({
