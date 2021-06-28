@@ -2,34 +2,23 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\SomeonePostedEvent;
 use App\Models\Post;
 use App\Models\User;
-use Inertia\Inertia;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\PostFormRequest;
 
-class DashboardController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-
-        $combinedPosts = Post::allPosts()->latest()->paginate();
-        // if ($request->wantsJson()) {
-        //     return $combinedPosts;
-        // }
-
-        return Inertia::render('Dashboard', [
-            'combinedPosts' => $combinedPosts,
-        ]);
-
-        // return Inertia::render('Dashboard', [
-        //         'combinedPosts' => $combinedPosts,
-        //         'suggestions' => User::suggestions()->take(5)->inRandomOrder()->get(),
-        //     ]);
+    public function index()
+    {
+        //
     }
 
     /**
@@ -45,21 +34,25 @@ class DashboardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PostFormRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostFormRequest $request)
     {
-        //
+        $data = $request->only(['body', 'user_id', 'parent_id']);
+        auth()->user()->posts()->create([
+            'body' => $data['body']
+        ]);
+        return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
         //
     }
@@ -67,10 +60,10 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
         //
     }
@@ -79,10 +72,10 @@ class DashboardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -90,10 +83,10 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
         //
     }
