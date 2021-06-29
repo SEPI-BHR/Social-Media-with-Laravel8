@@ -2,6 +2,7 @@ require('./bootstrap');
 
 // Import modules...
 
+import Vue from 'vue';
 import { createApp, h } from 'vue';
 import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
@@ -9,6 +10,12 @@ import { InertiaProgress } from '@inertiajs/progress';
 
 
 const el = document.getElementById('app');
+
+// .config.globalProperties.$filters = {
+//     timeAgo(created) {
+//       return moment(created).fromNow();
+//     }
+//   }
 window.Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -29,7 +36,6 @@ createApp({
             resolveComponent: (name) => require(`./Pages/${name}`).default,
         }),
 })
-
 
     .component('icon', require('./Components/Icon').default)
     .mixin({ methods: { route } })

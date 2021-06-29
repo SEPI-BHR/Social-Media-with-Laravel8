@@ -21,15 +21,10 @@ class DashboardController extends Controller
         // if ($request->wantsJson()) {
         //     return $combinedPosts;
         // }
-
         return Inertia::render('Dashboard', [
             'combinedPosts' => $combinedPosts,
+            'suggestions' => User::suggestions()->take(5)->inRandomOrder()->get(),
         ]);
-
-        // return Inertia::render('Dashboard', [
-        //         'combinedPosts' => $combinedPosts,
-        //         'suggestions' => User::suggestions()->take(5)->inRandomOrder()->get(),
-        //     ]);
     }
 
     /**

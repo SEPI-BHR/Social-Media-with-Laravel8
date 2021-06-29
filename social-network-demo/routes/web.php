@@ -7,6 +7,7 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PostController;
+use App\Http\Controllers\User\PostLikeController;
 
 
 
@@ -36,7 +37,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('user')->group(function(
     // });
     Route::prefix('posts')->name('posts.')->group(function() {
         Route::post('', [PostController::class, 'store'])->name('store');
-        // Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('friends')->name('friends.')->group(function(){
@@ -44,6 +45,11 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('user')->group(function(
         Route::patch('/{user}', [FriendController::class, 'update'])->name('update');
         Route::get('/{user}', [FriendController::class, 'deny'])->name('deny');
         Route::delete('/{user}', [FriendController::class, 'destroy'])->name('destroy');
+    });
+    
+    Route::prefix('post-like')->name('post-like.')->group(function() {
+        Route::post('/{post}', [PostLikeController::class, 'store'])->name('store');
+        Route::delete('/{post}', [PostLikeController::class, 'destroy'])->name('destroy');
     });
 
 });

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\SomeonePostedEvent;
-use App\Models\Post;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostFormRequest;
+use App\Models\Post;
+use Illuminate\Http\Request;
 
-class PostController extends Controller
+class PostLikeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,16 +31,13 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\PostFormRequest  $request
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Post $post
      * @return \Illuminate\Http\Response
      */
-    public function store(PostFormRequest $request)
+    public function store(Request $request, Post $post)
     {
-        $data = $request->only(['body', 'user_id', 'parent_id']);
-        auth()->user()->posts()->create([
-            'body' => $data['body']
-        ]);
-        return back();
+        return auth()->user()->like($post);
     }
 
     /**
@@ -88,19 +82,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if((auth()->user()->id != $post->user_id) && (!auth()->user()->is_friends_with($post->user_id))) {
-            return back()->withErrors(['message' => 'You do not have permission to delete this post!']);
-        }
-        if((auth()->user()->id != $post->user_id) && (auth()->user()->id != $post->parent_id)) {
-            return back()->withErrors(['message' => 'You do not have permission to delete this post!']);
-        }
-        if((auth()->user()->id != $post->user_id) && (auth()->user()->id = $post->parent_id)) {
-            $post->delete();
-            return back();
-        }
-        if((auth()->user()->id = $post->user_id)) {
-            $post->delete();
-            return back();
-        }
+        return auth()->user()->dislike($post);
     }
 }

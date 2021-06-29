@@ -28,16 +28,16 @@
                 <p class="bg-gray-100 rounded mt-3 px-3 py-2">{{ post.body }}</p>
             </div>
 
-            <!-- <div class="flex items-end my-3">
+            <div class="flex items-end my-3">
                 <div>
-                    <span class="text-sm italic">{{ post.created_at | timeAgo }}</span>
+                    <span class="text-sm italic">{{ timeAgoUnread  }}</span>
                 </div>
 
                 <div class="flex ml-3">
                     <like :item="post" :method="submitLike"></like>
                     <dislike :item="post" :method="submitDislike" class="ml-2"></dislike>
                 </div>
-            </div> -->
+            </div>
 
             <!-- <post-form :method="submit" :form="form" :text="'Comment'"></post-form> -->
             
@@ -47,7 +47,85 @@
 </template>
 
 <script>
+    // import CombinedComments from '@/Components/PostComment/CombinedComments'
+    import Dislike from '@/Components/PostComment/Likes/Dislike'
+    import Like from '@/Components/PostComment/Likes/Like'
+    // import PostForm from '@/Components/PostComment/PostForm'
     export default {
-        props:['post']
+        props: ['post'],
+        components: {
+            // CombinedComments,
+            Dislike,
+            Like,
+            // PostForm,
+        },
+        data() {
+            return {
+                openMenu: false,
+                form: this.$inertia.form({
+                    body: this.body,
+                    user_id: this.post.user_id,
+                }),
+				newUnread: this.post.created_at,
+                deleteForm: this.$inertia.form({
+                    userPost: this.post
+                }),
+                likeForm: this.$inertia.form({
+                    userPost: this.post
+                }),
+                dislikeForm: this.$inertia.form({
+                    userPost: this.post
+                })
+            }
+        },
+		computed: {
+            timeAgoUnread(newUnread) {
+                return moment(newUnread).fromNow()
+            }
+        },
+        methods: {
+            submit() {
+                this.form.post(this.route('comments.store', this.post), {
+                    preserveScroll: true,
+                    onSuccess:()=>{
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Your comment has successfully been published!'
+                        })
+                        this.form.body = null
+                    }
+                })
+            },
+            deletePost() {
+                this.openMenu = false
+                this.deleteForm.delete(this.route('posts.destroy', this.post), {
+                    preserveScroll: true,
+                    onError: () => {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'You do not have permission to delete this post!',
+                        })
+                    },
+                    onSuccess:()=>{
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Post has successfully been deleted!'
+                        })
+                    }
+                })
+            },
+            submitLike() {
+                this.likeForm.post(this.route('post-like.store', this.post), {
+                    preserveScroll: true,
+                    onSuccess:()=>{}
+                })
+            },
+            submitDislike() {
+                this.dislikeForm.delete(this.route('post-like.destroy', this.post), {
+                    preserveScroll: true,
+                    onSuccess:()=>{}
+                })
+            }
+        }
     }
 </script>
