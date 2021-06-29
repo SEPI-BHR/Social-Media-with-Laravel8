@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Comment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'parent_id', 'body'];
+    protected $fillable = ['user_id', 'post_id', 'body'];
 
-    /**
+      /**
      * The relationships that should always be loaded.
      *
      * @var array
      */
-    protected $with = ['user', 'comments'];
-    
+    protected $with = ['user'];
 
-    /**
+        /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -42,20 +41,15 @@ class Post extends Model
             ->count();
     }
 
-    public function scopeAllPosts($query) {
-        return $query->where('user_id', auth()->id())
-        ->orWhereIn('user_id', auth()->user()->friends_ids());
+    public function post() {
+        return $this->belongsTo(Post::class);
     }
 
     public function user() {
         return $this->belongsTo(User::class);
     }
-
     public function likes() {
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function comments() {
-        return $this->hasMany(Comment::class);
-    }
 }

@@ -39,25 +39,25 @@
                 </div>
             </div>
 
-            <!-- <post-form :method="submit" :form="form" :text="'Comment'"></post-form> -->
+            <post-form :method="submit" :form="form" :text="'Comment'"></post-form>
             
-            <!-- <combined-comments :comments="post.comments"></combined-comments> -->
+            <combined-comments :comments="post.comments"></combined-comments>
         </div>
     </div>
 </template>
 
 <script>
-    // import CombinedComments from '@/Components/PostComment/CombinedComments'
+    import CombinedComments from '@/Components/PostComment/CombinedComments'
     import Dislike from '@/Components/PostComment/Likes/Dislike'
     import Like from '@/Components/PostComment/Likes/Like'
-    // import PostForm from '@/Components/PostComment/PostForm'
+    import PostForm from '@/Components/PostComment/PostForm'
     export default {
         props: ['post'],
         components: {
-            // CombinedComments,
+            CombinedComments,
             Dislike,
             Like,
-            // PostForm,
+            PostForm,
         },
         data() {
             return {

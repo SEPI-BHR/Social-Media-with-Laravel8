@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\SomeonePostedEvent;
+// use App\Events\SomeonePostedEvent;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,10 +40,25 @@ class PostController extends Controller
     public function store(PostFormRequest $request)
     {
         $data = $request->only(['body', 'user_id', 'parent_id']);
-        auth()->user()->posts()->create([
-            'body' => $data['body']
-        ]);
-        return back();
+        if((auth()->user()->id != $data['user_id']) && (!auth()->user()->is_friends_with($request->user_id))) {
+            return back()->withErrors(['message' => 'You must be friends first!']);
+        }
+        if((auth()->user()->id != $data['user_id']) && (auth()->user()->is_friends_with($data['user_id']))) {
+            Post::create([
+                'body' => $data['body'],
+                'parent_id' => $data['user_id'],
+                'user_id' => auth()->user()->id
+            ]);
+            $user = User::where('id', $data['user_id'])->first();
+            event(new SomeonePostedEvent($user, auth()->user()));
+            return back();
+        }
+        if((auth()->user()->id = $data['user_id'])) {
+            auth()->user()->posts()->create([
+                'body' => $data['body'],
+            ]);
+            return back();
+        }
     }
 
     /**

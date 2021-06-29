@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\User;
+use App\Models\Comment;
 
-class ProfileController extends Controller
+class CommentLikeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,36 +32,22 @@ class ProfileController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request, Comment $comment) {
+        return auth()->user()->like($comment);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, User $user) {
-        $posts = Post::where('parent_id', $user->id)
-            ->orWhere('user_id', $user->id)
-            ->where('parent_id', null)
-            ->latest()
-            ->paginate();
-        // if ($request->wantsJson()) {
-        //     return $posts;
-        // }
-        return Inertia::render('User/Profile/Show', [
-            'profile' =>$user,
-            'posts' => $posts,
-            'isFriendsWith' => auth()->user()->is_friends_with($user->id),
-            'friendRequestSentTo' => auth()->user()->has_pending_friend_request_sent_to($user->id),
-            'friendRequestRecievedFrom' => auth()->user()->has_pending_friend_request_from($user->id),
-
-        ]);
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -92,11 +76,10 @@ class ProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Comment $comment) {
+        return auth()->user()->dislike($comment);
     }
 }

@@ -8,21 +8,51 @@
                     <span class="capitalize ml-3">{{ `${profile.username}'s Profile` }}</span>   
                 </h2>
                 <status :profile="profile" :isFriendsWith="isFriendsWith" :friendRequestSentTo="friendRequestSentTo" :friendRequestRecievedFrom="friendRequestRecievedFrom"></status>
-
             </div>
-
         </template>
+          <post-form :method="submit" :form="form" :text="'Post'"></post-form>
+          <combined-posts :posts="posts.data"></combined-posts>
+       
     </pages-layout>
 </template>
 
 <script>
+    import CombinedPosts from '@/Components/PostComment/CombinedPosts'
+    import PostForm from '@/Components/PostComment/PostForm'
     import PagesLayout from '@/Layouts/PagesLayout'
     import Status from '@/Components/FriendStatus/Status'
     export default {
-        props: ['profile', 'isFriendsWith', 'friendRequestSentTo', 'friendRequestRecievedFrom'],
+        props: ['profile', 'posts', 'isFriendsWith', 'friendRequestSentTo', 'friendRequestRecievedFrom'],
         components: {
             PagesLayout,
             Status,
-        }
+            CombinedPosts,
+            PostForm,
+        },
+        data() {
+            return {
+                form: this.$inertia.form({
+                    body: this.body,
+                    user_id: this.profile.id
+                }),
+                // allPosts: this.posts
+            }
+        },
+         methods: {
+             submit() {
+                this.form.post(this.route('posts.store'), {
+                    preserveScroll: true,
+                    onSuccess:()=>{
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Your post has successfully been published!'
+                        })
+                        this.form.body = null
+                    }
+                })
+            },
+
+
+         }
     }
 </script>
