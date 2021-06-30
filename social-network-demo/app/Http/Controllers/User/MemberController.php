@@ -14,13 +14,18 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+
+        public function index(Request $request, User $user) {
+        
         return Inertia::render('User/Members/Index', [
-            'members' => User::all()
+            'members' => User::when($request->username, function($query, $username) {
+                    $query->where('username', 'LIKE', '%'.$username.'%');
+                })->paginate(20)
         ]);
+
     }
 
+  
     /**
      * Show the form for creating a new resource.
      *

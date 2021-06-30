@@ -10,24 +10,29 @@
                 <status :profile="profile" :isFriendsWith="isFriendsWith" :friendRequestSentTo="friendRequestSentTo" :friendRequestRecievedFrom="friendRequestRecievedFrom"></status>
             </div>
         </template>
-          <post-form :method="submit" :form="form" :text="'Post'"></post-form>
-          <combined-posts :posts="posts.data"></combined-posts>
+        <post-form :method="submit" :form="form" :text="'Post'"></post-form>
+
+        <infinite-scroll @loadMore="loadMorePosts">
+            <combined-posts :posts="allPosts.data" :pagination="pagination"></combined-posts>
+        </infinite-scroll>
        
     </pages-layout>
 </template>
 
 <script>
     import CombinedPosts from '@/Components/PostComment/CombinedPosts'
-    import PostForm from '@/Components/PostComment/PostForm'
+    import InfiniteScroll from '@/Components/InfiniteScroll'
     import PagesLayout from '@/Layouts/PagesLayout'
+    import PostForm from '@/Components/PostComment/PostForm'
     import Status from '@/Components/FriendStatus/Status'
     export default {
         props: ['profile', 'posts', 'isFriendsWith', 'friendRequestSentTo', 'friendRequestRecievedFrom'],
         components: {
-            PagesLayout,
-            Status,
             CombinedPosts,
+            InfiniteScroll,
+            PagesLayout,
             PostForm,
+            Status
         },
         data() {
             return {
@@ -35,11 +40,16 @@
                     body: this.body,
                     user_id: this.profile.id
                 }),
-                // allPosts: this.posts
+                allPosts: this.posts
             }
         },
-         methods: {
-             submit() {
+        computed: {
+            pagination() {
+                return this.allPosts = this.posts
+            }
+        },
+        methods: {
+            submit() {
                 this.form.post(this.route('posts.store'), {
                     preserveScroll: true,
                     onSuccess:()=>{
@@ -51,8 +61,20 @@
                     }
                 })
             },
-
-
-         }
+            loadMorePosts() {
+                if (!this.allPosts.next_page_url) {
+                    return
+                }
+                return axios.get(this.allPosts.next_page_url)
+                    .then(resp => {
+                        this.allPosts = {
+                            ...resp.data,
+                            data: [
+                                ...this.allPosts.data, ...resp.data.data
+                            ]
+                        }
+                    })
+            }
+        }
     }
 </script>

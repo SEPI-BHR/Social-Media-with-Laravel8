@@ -50,7 +50,7 @@ class PostController extends Controller
                 'user_id' => auth()->user()->id
             ]);
             $user = User::where('id', $data['user_id'])->first();
-            event(new SomeonePostedEvent($user, auth()->user()));
+            // event(new SomeonePostedEvent($user, auth()->user()));
             return back();
         }
         if((auth()->user()->id = $data['user_id'])) {

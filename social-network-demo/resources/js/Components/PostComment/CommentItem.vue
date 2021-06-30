@@ -17,7 +17,7 @@
             </div>
             <div class="flex items-end my-3">
                 <div>
-                    <span class="text-sm italic">{{ timeAgoUnread  }}</span>
+                    <span class="text-sm italic">{{ timeAgoTimeUnread  }}</span>
                 </div>
                 <div class="flex ml-3">
                     <like :item="comment" :method="submitLike"></like>
@@ -42,15 +42,16 @@
                 likeForm: this.$inertia.form({
                     comment: this.comment
                 }),
-                 newUnread: this.comment.created_at,
+                 newTimeUnread: this.comment.created_at,
                 dislikeForm: this.$inertia.form({
                     comment: this.comment
                 }),
             }
         },
         	computed: {
-            timeAgoUnread(newUnread) {
-                return moment(newUnread).fromNow()
+            
+            timeAgoTimeUnread(newTimeUnread) {
+                return moment(newTimeUnread).fromNow()
             }
         },
         methods: {

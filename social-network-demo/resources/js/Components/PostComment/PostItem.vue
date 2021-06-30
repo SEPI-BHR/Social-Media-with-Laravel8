@@ -30,7 +30,7 @@
 
             <div class="flex items-end my-3">
                 <div>
-                    <span class="text-sm italic">{{ timeAgoUnread  }}</span>
+                    <span class="text-sm italic">{{ unreadTimeAgo  }}</span>
                 </div>
 
                 <div class="flex ml-3">
@@ -52,6 +52,7 @@
     import Like from '@/Components/PostComment/Likes/Like'
     import PostForm from '@/Components/PostComment/PostForm'
     export default {
+
         props: ['post'],
         components: {
             CombinedComments,
@@ -66,7 +67,8 @@
                     body: this.body,
                     user_id: this.post.user_id,
                 }),
-				newUnread: this.post.created_at,
+				// newUnread: this.post.created_at,
+                newPostread: this.post.created_at,
                 deleteForm: this.$inertia.form({
                     userPost: this.post
                 }),
@@ -79,8 +81,13 @@
             }
         },
 		computed: {
-            timeAgoUnread(newUnread) {
-                return moment(newUnread).fromNow()
+            // timeAgoUnread(newUnread) {
+            //     return moment(newUnread).fromNow()
+            // }
+            
+            unreadTimeAgo(newPostread) {
+                return moment(newPostread).fromNow()
+              
             }
         },
         methods: {

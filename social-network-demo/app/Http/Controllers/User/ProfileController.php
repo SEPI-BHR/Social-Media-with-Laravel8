@@ -52,10 +52,10 @@ class ProfileController extends Controller
             ->orWhere('user_id', $user->id)
             ->where('parent_id', null)
             ->latest()
-            ->paginate();
-        // if ($request->wantsJson()) {
-        //     return $posts;
-        // }
+            ->paginate(5);
+        if ($request->wantsJson()) {
+            return $posts;
+        }
         return Inertia::render('User/Profile/Show', [
             'profile' =>$user,
             'posts' => $posts,
