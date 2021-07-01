@@ -3,7 +3,7 @@
 
 We created this website as our final project in Internet Engineering course 992.
 
-Memebers:
+Members:
 - Sepideh Bahrami
 - Tahere Hemmati
 - Amir Abbasi
